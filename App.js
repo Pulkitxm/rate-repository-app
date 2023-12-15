@@ -1,10 +1,10 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-
+import { Alert, Pressable, StyleSheet, Text, View } from 'react-native';
+import RepositoryList from './src/components/RepositoryList';
 export default function App() {
   return (
     <View style={styles.container}>
-      <Text>Pulkit</Text>
+      <RepositoryList/>
       <StatusBar style="auto" />
     </View>
   );
