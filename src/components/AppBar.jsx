@@ -9,15 +9,16 @@ const styles = StyleSheet.create({
         paddingTop: Constants.statusBarHeight,
         width:'100%',
         backgroundColor: Styles.colors.appBarBg,
-        marginBottom: 10,
         display: 'flex',
         flexDirection: "row",
+        justifyContent:"space-between"
     },
 });
 
 const AppBar = () => {
     return <View style={styles.container}>
-        <AppBarTab title={"Repositories"}/>
+        <AppBarTab title={"Repositories"} url="/"/>
+        <AppBarTab title={"Sign-in/up"} url="/signin"/>
     </View>;
 };
 
