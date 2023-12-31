@@ -8,11 +8,6 @@ const styles = StyleSheet.create({
     container: {
         paddingTop: Constants.statusBarHeight,
         backgroundColor: Styles.colors.appBarBg,
-        display: 'flex',
-        flexDirection: "row",
-        justifyContent: "center",
-        alignItems: "center",
-        overflow: "scroll",
     },
 });
 

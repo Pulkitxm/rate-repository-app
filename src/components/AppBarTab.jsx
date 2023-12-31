@@ -7,7 +7,7 @@ const styles = StyleSheet.create({
     appBarTab: {
         color: Styles.colors.appBarText,
         padding: 20,
-        fontSize: 25,
+        fontSize: 20,
         fontWeight: Styles.colors.appBarTextWeight,
     }
 });
