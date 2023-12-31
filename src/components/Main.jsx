@@ -8,8 +8,8 @@ const Main = () => {
         <View style={{ width: "100%", height: "100%", backgroundColor:"#e1e4e8"}}>
             <AppBar />
             <Routes>
-                <Route path="/signin" element={<RepositoryList />} />
-                <Route path="/" element={<SignIn />} />
+                <Route path="/" element={<RepositoryList />} />
+                <Route path="/signin" element={<SignIn />} />
                 <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
         </View>

@@ -61,7 +61,7 @@ const RepositoryItem = ({ item }) => {
             <View style={styles.top}>
                 <Image style={styles.avatar} source={{ uri: item.ownerAvatarUrl}}/>
                 <View>
-                    <Text style={{fontWeight:"900",fontSize:20}} >{item.fullName} </Text>
+                    <Text style={{ fontWeight: "900", fontSize: 20, width: 220 }} >{item.fullName} </Text>
                     <Text style={{ opacity: .7, width: 200, marginTop:10, fontSize: 13 }}>{item.description}</Text>
                 </View>
             </View>
