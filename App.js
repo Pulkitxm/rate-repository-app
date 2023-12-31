@@ -1,8 +1,9 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Platform } from 'react-native';
 import { NativeRouter } from 'react-router-native';
 import Main from './src/components/Main';
 export default function App() {
+  console.log(Platform.OS);
   return (
     <View style={styles.container}>
       <NativeRouter>
