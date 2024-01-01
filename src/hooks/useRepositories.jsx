@@ -6,11 +6,11 @@ const useRepositories = () => {
 
     const fetchRepositories = async () => {
         setLoading(true);
-        const url = 'http://192.168.1.7:5000/api/repositories'
+        const url = `http://${process.env.IP}:5000/api/repositories`;
         console.log("fetching response from " + url);
         const response = await fetch(url).then((res) => {
-            console.log("response fetched succesfully")
-            return res
+            console.log("response fetched succesfully");
+            return res;
         })
         const json = await response.json();
         const data = json.edges.map(a => {
