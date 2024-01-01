@@ -1,47 +1,36 @@
-import { FlatList, View, StyleSheet } from 'react-native';
+import { FlatList, View, StyleSheet, ActivityIndicator } from 'react-native';
 import RepositoryItem from './RepositoryItem'
-import { useEffect, useState } from 'react';
+import Loader from './Loader'
 const styles = StyleSheet.create({
     separator: {
         height: 10,
+    },
+    loaderContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
 });
 
 const ItemSeparator = () => <View style={styles.separator} />;
 
-const RepositoryList = () => {
+const RepositoryList = ({ repositories, loading }) => {
 
-    const [repositories, setRepositories] = useState()
+    if (loading) {
+        return (
+            <View style={styles.loaderContainer}>
+                <Loader text={"loading respositories..."} />
+            </View>
+        );
+    }
 
-    const fetchRepositories = async () => {
-        const response = await fetch('http://192.168.1.7:5000/api/repositories')
-        const json = await response.json();
-        const data = json.edges.map(a => {
-            const i = a.node
-            return {
-                id: i.id,
-                fullName: i.fullName,
-                description: i.description,
-                language: i.language,
-                forksCount: i.forksCount,
-                stargazersCount: i.stargazersCount,
-                ratingAverage: i.ratingAverage,
-                reviewCount: i.reviewCount,
-                ownerAvatarUrl: i.ownerAvatarUrl
-            }
-        })
-        setRepositories(data);
-    };
-    useEffect(() => {
-        fetchRepositories();
-    }, []);
     return (
         <FlatList
             data={repositories}
             ItemSeparatorComponent={ItemSeparator}
             renderItem={({ item, index, separators }) => (
                 <RepositoryItem
-                    key={index}
+                    key={item.id}
                     item={item}
                 />
             )}
