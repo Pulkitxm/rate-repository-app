@@ -2,6 +2,7 @@ import * as yup from 'yup';
 import { Text, TextInput, Pressable, View } from 'react-native';
 import { Formik, useField } from 'formik';
 import { Alert } from 'react-native';
+import useSignIn from '../hooks/useSignin';
 
 const validationSchema = yup.object().shape({
     username: yup
@@ -89,10 +90,16 @@ const SingInForm = ({ onSubmit }) => {
 };
 
 const SignIn = () => {
-    const onSubmit = values => {
+    const { signIn,error } = useSignIn()
+    const onSubmit = async (values) => {
         const { username, password } = values;
         if (username != "" && password != "") {
-            Alert.alert(`Username: ${username}, Password: ${password}`);
+            try {
+                const res = await signIn(username, password)
+                console.log(res);
+            } catch (err) {
+                Alert.alert(err.message)
+            }
         } else {
             Alert.alert("Please enter username and password to sign in ")
         }
