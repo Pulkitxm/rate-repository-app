@@ -6,6 +6,8 @@ import AppBar from './AppBar';
 import useRepositories from '../hooks/useRepositories';
 import { useQuery } from '@apollo/client';
 import { GET_REPOSITORIES } from '../graphql/queries';
+// import AuthStorage from '../../authStorage'
+import { useEffect } from 'react';
 const Main = () => {
     const { repositories,loading,refetch } = useRepositories();
     return (

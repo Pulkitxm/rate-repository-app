@@ -29,6 +29,6 @@ export default {
   },
   extra: {
     env: process.env.ENV,
-    APOLLO_URI: process.env.ENV ==='development' ? "http://192.168.1.7:4000/graphql" : "production url",
+    apolloUri: process.env.ENV ==='development' ? "http://192.168.1.7:4000/graphql" : "production url",
   },
 }

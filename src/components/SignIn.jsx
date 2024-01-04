@@ -3,6 +3,7 @@ import { Text, TextInput, Pressable, View } from 'react-native';
 import { Formik, useField } from 'formik';
 import { Alert } from 'react-native';
 import useSignIn from '../hooks/useSignin';
+// import AuthStorage from '../../authStorage';
 
 const validationSchema = yup.object().shape({
     username: yup
@@ -90,13 +91,15 @@ const SingInForm = ({ onSubmit }) => {
 };
 
 const SignIn = () => {
-    const { signIn,error } = useSignIn()
+    const { signIn, error } = useSignIn()
+    // const authStorage = new AuthStorage();
     const onSubmit = async (values) => {
         const { username, password } = values;
         if (username != "" && password != "") {
             try {
                 const res = await signIn(username, password)
                 console.log(res);
+                // await authStorage.setAccessToken(res.accessToken)
             } catch (err) {
                 Alert.alert(err.message)
             }
