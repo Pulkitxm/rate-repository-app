@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, Image, StyleSheet } from 'react-native'
+import { View, Text, Image, StyleSheet, Platform } from 'react-native'
 
 import theme from '../../theme'
 
@@ -8,7 +8,25 @@ const styles = StyleSheet.create({
         display: "flex",
         padding: 10,
         backgroundColor: "#fff",
-        marginBottom:10,
+        marginBottom: 10,
+        ...Platform.select({
+            android: {
+                elevation: 10,
+            },
+            ios: {
+                shadowColor: "#000",
+                shadowOffset: {
+                    width: 0,
+                    height: 2,
+                },
+                shadowOpacity: 0.25,
+                shadowRadius: 3.84,
+            },
+            default: {
+                boxShadow: "0px 0px 20px rgba(0, 0, 0, 1)",
+
+            }
+        })
     },
     avatar: {
         width: 56,

@@ -1,4 +1,4 @@
-import { FlatList, View, StyleSheet, ActivityIndicator } from 'react-native';
+import { FlatList, View, Text, StyleSheet, Pressable, Button } from 'react-native';
 import RepositoryItem from './RepositoryItem'
 import Loader from './Loader'
 const styles = StyleSheet.create({
@@ -14,8 +14,7 @@ const styles = StyleSheet.create({
 
 const ItemSeparator = () => <View style={styles.separator} />;
 
-const RepositoryList = ({ repositories, loading }) => {
-
+const RepositoryList = ({ repositories, loading, refetch }) => {
     if (loading) {
         return (
             <View style={styles.loaderContainer}>
@@ -23,18 +22,20 @@ const RepositoryList = ({ repositories, loading }) => {
             </View>
         );
     }
-
     return (
-        <FlatList
-            data={repositories}
-            ItemSeparatorComponent={ItemSeparator}
-            renderItem={({ item, index, separators }) => (
-                <RepositoryItem
-                    key={item.id}
-                    item={item}
-                />
-            )}
-        />
+        <>
+            {/* <Button title="Click me" onPress={() => refetch()} /> */}
+            <FlatList
+                data={repositories}
+                ItemSeparatorComponent={ItemSeparator}
+                renderItem={({ item, index, separators }) => (
+                    <RepositoryItem
+                        key={item.id}
+                        item={item}
+                    />
+                )}
+            />
+        </>
     );
 };
 

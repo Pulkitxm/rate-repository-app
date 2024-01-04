@@ -56,7 +56,6 @@ const styles = {
 const SingInForm = ({ onSubmit }) => {
     const [usernameField, usernameMeta, usernameHelpers] = useField('username');
     const [passwordField, passwordMeta, passwordHelpers] = useField('password');
-    console.log(usernameMeta.error, passwordMeta.error);
     const userNameError = usernameMeta.touched && usernameMeta.error;
     const passwordError = passwordMeta.touched && passwordMeta.error;
     return (
@@ -92,7 +91,6 @@ const SingInForm = ({ onSubmit }) => {
 const SignIn = () => {
     const onSubmit = values => {
         const { username, password } = values;
-        console.log(values);
         if (username != "" && password != "") {
             Alert.alert(`Username: ${username}, Password: ${password}`);
         } else {
