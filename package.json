@@ -18,7 +18,9 @@
     "transformIgnorePatterns": [
       "node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|react-native-svg|react-router-native)"
     ],
-    "setupFilesAfterEnv": ["<rootDir>/setupTests.js"]
+    "setupFilesAfterEnv": [
+      "<rootDir>/setupTests.js"
+    ]
   },
   "dependencies": {
     "@apollo/client": "^3.8.8",
@@ -33,11 +35,13 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-native": "0.72.6",
+    "react-native-svg": "^14.1.0",
     "react-native-web": "~0.19.6",
     "react-router-dom": "^6.21.1",
     "react-router-native": "^6.21.1",
     "start": "^5.1.0",
-    "yup": "^1.3.3"
+    "yup": "^1.3.3",
+    "expo-linking": "~5.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

@@ -11,6 +11,7 @@ const Main = () => {
             <AppBar />
             <Routes>
                 <Route path="/" element={<RepositoryList repositories={repositories} loading={loading} refetch={refetch} />} />
+                <Route path="/repo/:id" element={<RepositoryList repositories={repositories} loading={loading} refetch={refetch} />} />
                 <Route path="/signin" element={<SignIn />} />
                 <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>

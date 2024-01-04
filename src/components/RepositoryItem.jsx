@@ -1,7 +1,9 @@
 import React from 'react'
-import { View, Text, Image, StyleSheet, Platform } from 'react-native'
-
+import { View, Text, Image, StyleSheet, Platform, Button, Pressable } from 'react-native'
+import { SvgXml } from 'react-native-svg';
 import theme from '../../theme'
+import { Link, useNavigate } from 'react-router-native';
+import * as Linking from 'expo-linking';
 
 const styles = StyleSheet.create({
     tab: {
@@ -37,25 +39,25 @@ const styles = StyleSheet.create({
         display: "flex",
         justifyContent: "space-around",
         flexDirection: "row",
-        width:"87%"
+        width: "100%"
     },
     mid: {
         display: "flex",
         justifyContent: "center",
-        flexDirection:"row",
+        flexDirection: "row",
         alignContent: "center",
-        marginTop:10,
-        marginBottom:10,
+        marginTop: 10,
+        marginBottom: 10,
     },
     language: {
         display: "flex",
-        flexDirection:"row",
+        flexDirection: "row",
         justifyContent: "center",
-        alignItems:"center",
+        alignItems: "center",
         backgroundColor: theme.colors.primary,
-        width:100,
+        width: 100,
         height: 40,
-        borderRadius:10
+        borderRadius: 10
     },
     bottom: {
         display: "flex",
@@ -72,41 +74,62 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
 });
-
-const RepositoryItem = ({ item }) => {
+const svgData = `
+  <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="100" height="100" viewBox="0 0 64 64">
+    <path d="M 12 8 L 8 12 L 24.666016 32 L 8 52 L 12 56 L 32 39.333984 L 52 56 L 56 52 L 39.333984 32 L 56 12 L 52 8 L 32 24.666016 L 12 8 z"></path>
+  </svg>
+`;
+const RepositoryItem = ({ item, isSingle,index }) => {
+    const navigate = useNavigate()
     return (
-        <View testID='repositoryItem' style={styles.tab}>
-            <View style={styles.top}>
-                <Image style={styles.avatar} source={{ uri: item.ownerAvatarUrl}}/>
-                <View>
-                    <Text style={{ fontWeight: "900", fontSize: 20, width: 220 }} >{item.fullName} </Text>
-                    <Text style={{ opacity: .7, width: 200, marginTop:10, fontSize: 13 }}>{item.description}</Text>
+        <Pressable style={styles.tab} onPress={() => {
+            if (!isSingle) navigate(`/repo/${index + 1}`);
+        }}>
+            <View testID='repositoryItem' >
+                <View style={styles.top}>
+                    <Image style={styles.avatar} source={{ uri: item.ownerAvatarUrl }} />
+                    <View>
+                        <Text style={{ fontWeight: "900", fontSize: 20, width: 220 }} >{item.fullName} </Text>
+                        <Text style={{ opacity: .7, width: 200, marginTop: 10, fontSize: 13 }}>{item.description}</Text>
+                    </View>
+                    {
+                        isSingle && <Pressable onPress={() => {
+                            navigate("/")
+                        }} >
+                            <SvgXml xml={svgData} width="30" height="30" />
+                        </Pressable>
+                    }
                 </View>
+                <View style={styles.mid}>
+                    <View style={styles.language}>
+                        <Text style={{ color: "#fff", fontSize: 18 }} >{item.language}</Text>
+                    </View>
+                </View>
+                <View style={styles.bottom}>
+                    <View style={styles.botTab} >
+                        <Text style={{ fontWeight: 900, fontSize: 17, opacity: .7 }} >{item.stargazersCount}</Text>
+                        <Text style={{ fontSize: 17, opacity: .7 }} >Stars</Text>
+                    </View>
+                    <View style={styles.botTab} >
+                        <Text style={{ fontWeight: 900, fontSize: 17, opacity: .7 }} >{item.forksCount}</Text>
+                        <Text style={{ fontSize: 17, opacity: .7 }} >Forks</Text>
+                    </View>
+                    <View style={styles.botTab} >
+                        <Text style={{ fontWeight: 900, fontSize: 17, opacity: .7 }} >{item.reviewCount}</Text>
+                        <Text style={{ fontSize: 17, opacity: .7 }} >Reviews</Text>
+                    </View>
+                    <View style={styles.botTab} >
+                        <Text style={{ fontWeight: 900, fontSize: 17, opacity: .7 }} >{item.ratingAverage}</Text>
+                        <Text style={{ fontSize: 17, opacity: .7 }} >Ratings</Text>
+                    </View>
+                </View>
+                {
+                    isSingle && <Button style={styles.bottom} title='Open in Github' onPress={() => {
+                        Linking.openURL(item.url)
+                    }} />
+                }
             </View>
-            <View style={styles.mid}>
-                <View style={styles.language}>
-                    <Text style={{ color: "#fff", fontSize: 18 }} >{item.language}</Text>
-                </View>
-            </View>
-            <View style={styles.bottom}>                
-                <View style={styles.botTab} >
-                    <Text style={{fontWeight:900,fontSize:17,opacity:.7}} >{item.stargazersCount}</Text>
-                    <Text style={{fontSize:17,opacity:.7}} >Stars</Text>
-                </View>
-                <View style={styles.botTab} >
-                    <Text style={{fontWeight:900,fontSize:17,opacity:.7}} >{item.forksCount}</Text>
-                    <Text style={{fontSize:17,opacity:.7}} >Forks</Text>
-                </View>
-                <View style={styles.botTab} >
-                    <Text style={{fontWeight:900,fontSize:17,opacity:.7}} >{item.reviewCount}</Text>
-                    <Text style={{fontSize:17,opacity:.7}} >Reviews</Text>
-                </View>
-                <View style={styles.botTab} >
-                    <Text style={{fontWeight:900,fontSize:17,opacity:.7}} >{item.ratingAverage}</Text>
-                    <Text style={{fontSize:17,opacity:.7}} >Ratings</Text>
-                </View>
-            </View>
-        </View>
+        </Pressable>
     )
 }
 
