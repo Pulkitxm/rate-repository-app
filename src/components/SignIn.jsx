@@ -3,7 +3,7 @@ import { Text, TextInput, Pressable, View } from 'react-native';
 import { Formik, useField } from 'formik';
 import { Alert } from 'react-native';
 import useSignIn from '../hooks/useSignin';
-import {useNavigate} from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 const validationSchema = yup.object().shape({
     username: yup
@@ -66,29 +66,41 @@ const SingInForm = ({ onSubmit }) => {
         >
             <TextInput
                 placeholder="Username"
+                testID='username'
                 value={usernameField.value}
                 onChangeText={text => usernameHelpers.setValue(text)}
-                style={userNameError ? { ...styles.inputText,borderColor:"#d73a4a" } : { ...styles.inputText }}
+                style={userNameError ? { ...styles.inputText, borderColor: "#d73a4a" } : { ...styles.inputText }}
             />
-            { userNameError &&<Text style={styles.errorText} >
+            {userNameError && <Text style={styles.errorText} >
                 {usernameMeta.error}
             </Text>}
             <TextInput
                 secureTextEntry={true}
+                testID='password'
                 placeholder="Password"
                 value={passwordField.value}
                 onChangeText={text => passwordHelpers.setValue(text)}
                 style={passwordError ? { ...styles.inputText, borderColor: "#d73a4a" } : { ...styles.inputText }}
             />
-            {passwordError &&<Text style={styles.errorText} >
+            {passwordError && <Text style={styles.errorText} >
                 {passwordMeta.error}
             </Text>}
-            <Pressable onPress={onSubmit}>
-                <Text style={styles.buttonSubmit}>Sign In</Text>
+            <Pressable onPress={onSubmit}   >
+                <Text style={styles.buttonSubmit} testID='submit'>Sign-In</Text>
             </Pressable>
         </View>
     );
 };
+
+export const SiginContainer = ({ onSubmit }) => {
+    return <Formik
+        initialValues={initialValues}
+        onSubmit={onSubmit}
+        validationSchema={validationSchema}
+    >
+        {({ handleSubmit }) => <SingInForm onSubmit={handleSubmit} />}
+    </Formik >
+}
 
 const SignIn = () => {
     const { signIn, error } = useSignIn()
@@ -108,13 +120,7 @@ const SignIn = () => {
     };
 
     return (
-        <Formik
-            initialValues={initialValues}
-            onSubmit={onSubmit}
-            validationSchema={validationSchema}
-        >
-            {({ handleSubmit }) => <SingInForm onSubmit={handleSubmit} />}
-        </Formik>
+        <SiginContainer onSubmit={onSubmit} />
     );
 };
 
