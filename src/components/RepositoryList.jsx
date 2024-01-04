@@ -14,6 +14,19 @@ const styles = StyleSheet.create({
 
 const ItemSeparator = () => <View style={styles.separator} />;
 
+export const RepositoryListContainer = ({ repositories }) => {
+    return <FlatList
+        data={repositories}
+        ItemSeparatorComponent={ItemSeparator}
+        renderItem={({ item}) => (
+            <RepositoryItem
+                key={item.id}
+                item={item}
+            />
+        )}
+    />
+}
+
 const RepositoryList = ({ repositories, loading, refetch }) => {
     if (loading) {
         return (
@@ -25,16 +38,7 @@ const RepositoryList = ({ repositories, loading, refetch }) => {
     return (
         <>
             {/* <Button title="Click me" onPress={() => refetch()} /> */}
-            <FlatList
-                data={repositories}
-                ItemSeparatorComponent={ItemSeparator}
-                renderItem={({ item, index, separators }) => (
-                    <RepositoryItem
-                        key={item.id}
-                        item={item}
-                    />
-                )}
-            />
+            <RepositoryListContainer repositories={repositories} />
         </>
     );
 };
