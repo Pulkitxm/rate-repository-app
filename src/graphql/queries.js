@@ -15,12 +15,53 @@ export const GET_REPOSITORIES = gql`
           ratingAverage
           reviewCount
           ownerAvatarUrl
+          reviews {
+            edges {
+              node {
+                userId
+                rating
+                text
+                id
+              }
+            }
+          }
         }
       }
     }
   }
   `;
-  
+
+export const GET_REPOSITORY = gql`
+  query Query($repositoryId: ID!) {
+  repository(id: $repositoryId) {
+          id
+          url
+          fullName
+          description
+          language
+          forksCount
+          stargazersCount
+          ratingAverage
+          reviewCount
+          ownerAvatarUrl
+          reviews {
+            edges {
+              node {
+                userId
+                rating
+                text
+                id
+                user {
+                  username
+                }
+                createdAt
+              }
+          }
+        }
+    }
+  }
+  `;
+
 export const SIGNIN = gql`
   mutation SignIn($username: String!, $password: String!) {
     authenticate(credentials: { username: $username, password: $password }) {

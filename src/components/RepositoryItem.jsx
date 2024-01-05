@@ -1,9 +1,10 @@
 import React from 'react'
-import { View, Text, Image, StyleSheet, Platform, Button, Pressable } from 'react-native'
+import { View, Text, Image, StyleSheet, Platform, Button, Pressable, FlatList } from 'react-native'
 import { SvgXml } from 'react-native-svg';
 import theme from '../../theme'
 import { Link, useNavigate } from 'react-router-native';
 import * as Linking from 'expo-linking';
+import Review from './Review'
 
 const styles = StyleSheet.create({
     tab: {
@@ -83,7 +84,7 @@ const RepositoryItem = ({ item, isSingle,index }) => {
     const navigate = useNavigate()
     return (
         <Pressable style={styles.tab} onPress={() => {
-            if (!isSingle) navigate(`/repo/${index + 1}`);
+            if (!isSingle) navigate(`/repo/${item.id}`);
         }}>
             <View testID='repositoryItem' >
                 <View style={styles.top}>
@@ -123,11 +124,27 @@ const RepositoryItem = ({ item, isSingle,index }) => {
                         <Text style={{ fontSize: 17, opacity: .7 }} >Ratings</Text>
                     </View>
                 </View>
-                {
-                    isSingle && <Button style={styles.bottom} title='Open in Github' onPress={() => {
-                        Linking.openURL(item.url)
-                    }} />
-                }
+                <View>  
+                    {
+                        isSingle && <Button style={styles.bottom} title='Open in Github' onPress={() => {
+                            Linking.openURL(item.url)
+                        }} />
+                    }
+                </View>
+                <Text style={{ marginTop: 10, marginBottom: 10, fontSize: 30, fontWeight: 800 }} >Reviews</Text>
+                <FlatList
+                    style={{...styles.reviews,marginTop:10}}
+                    data={item.reviews}
+                    renderItem={({ item: review }) => (
+                        <Review
+                            rating={review.rating}
+                            text={review.text}
+                            user={review.user}
+                            createdAt={review.createdAt}
+                        />
+                    )}
+                    keyExtractor={({ id }) => id}
+                />
             </View>
         </Pressable>
     )

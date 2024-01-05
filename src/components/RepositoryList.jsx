@@ -1,8 +1,9 @@
 import { FlatList, View, Text, StyleSheet, Pressable, Button } from 'react-native';
 import RepositoryItem from './RepositoryItem'
 import Loader from './Loader'
-import { Link, useParams } from 'react-router-native';
-import { collectFields } from 'graphql/execution/execute';
+import { useParams } from 'react-router-native';
+import useRepository from '../hooks/useRepository';
+import useRepositories from '../hooks/useRepositories';
 const styles = StyleSheet.create({
     separator: {
         height: 10,
@@ -18,30 +19,21 @@ const ItemSeparator = () => <View style={styles.separator} />;
 
 export const RepositoryListContainer = ({ repositories }) => {
     return <FlatList
-            data={repositories}
-            ItemSeparatorComponent={ItemSeparator}
-            renderItem={({ item,index }) => (
-                <RepositoryItem
-                    key={item.id}
-                    item={item}
-                    isSingle={false}
-                    index={index}
-                />
-            )}
-        />
+        data={repositories}
+        ItemSeparatorComponent={ItemSeparator}
+        renderItem={({ item, index }) => (
+            <RepositoryItem
+                key={item.id}
+                item={item}
+                isSingle={false}
+                index={index}
+            />
+        )}
+    />
 }
 
-const RepositoryList = ({ repositories, loading, refetch }) => {
-    const params = useParams()
-    if (params && params.id) {
-        const id = params.id
-        return <RepositoryItem
-            key={id}
-            item={repositories[id-1]}
-            isSingle={true}
-            index={id}
-        />
-    }
+const ShowRepositories = () => {
+    const { repositories, loading, refetch } = useRepositories();
     if (loading) {
         return (
             <View style={styles.loaderContainer}>
@@ -49,12 +41,54 @@ const RepositoryList = ({ repositories, loading, refetch }) => {
             </View>
         );
     }
-    return (
-        <>
-            {/* <Button title="Click me" onPress={() => refetch()} /> */}
-            <RepositoryListContainer repositories={repositories} />
-        </>
-    );
+    return <RepositoryListContainer repositories={repositories} />
+}
+
+export const RepositoryContainer = ({ id }) => {
+    const { data, loading, refetch } = useRepository(id);
+    if(loading){
+        return <View style={styles.loaderContainer}>
+            <Loader text={"loading respository..."} />
+        </View> 
+    }
+    const repo = {
+        id:data.repository.id,
+        url:data.repository.url,
+        fullName:data.repository.fullName,
+        description:data.repository.description,
+        language:data.repository.language,
+        forksCount:data.repository.forksCount,
+        stargazersCount:data.repository.stargazersCount,
+        ratingAverage:data.repository.ratingAverage,
+        reviewCount:data.repository.reviewCount,
+        ownerAvatarUrl:data.repository.ownerAvatarUrl,
+    }
+    repo.reviews = data.repository.reviews.edges.map(i => {
+        let j = i.node
+        j =  {
+            ...j,
+            user:j.user.username
+        }
+        delete j["__typename"]
+        delete j["userId"]
+        return j
+    })
+    return <>
+        <RepositoryItem
+            item={repo}
+            isSingle={true}
+        />
+    </>
+}
+
+const RepositoryList = () => {
+    const params = useParams()
+    if (params && params.id) {
+        const ID = params.id
+        return <RepositoryContainer id={ID} />
+    } else {
+        return <ShowRepositories />
+    }
 };
 
 export default RepositoryList;
