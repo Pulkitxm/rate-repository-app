@@ -4,6 +4,7 @@ import RepositoryList from './RepositoryList';
 import SignIn from './SignIn';
 import SignUp from './SignUp';
 import AppBar from './AppBar';
+import MyReviews from './MyReviews';
 import ReviewForm from './ReviewForm';
 const Main = () => {
     return (
@@ -16,6 +17,7 @@ const Main = () => {
                 <Route path="/signin/:username/:password" element={<SignIn />} />
                 <Route path="/signup" element={<SignUp />} />
                 <Route path="/addReview" element={<ReviewForm />} />
+                <Route path="/myReviews" element={<MyReviews />} />
                 <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
         </View>

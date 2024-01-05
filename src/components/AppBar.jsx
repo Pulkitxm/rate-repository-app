@@ -24,15 +24,15 @@ const AppBar = () => {
             }
             <AppBarTab title={"Repositories"} url="/" />
             {
-                meData && meData.me &&
-                <AppBarTab title={"Create a Review"} url="/addReview" />
-            }
-            {
                 meData && meData.me ?
-                    <AppBarTab title={"Sign-out"} handlePress={async () => {
-                        await authStorage.removeAccessToken()
-                        await apolloClient.resetStore();
-                    }} />
+                    <>
+                        <AppBarTab title={"Create a Review"} url="/addReview" />
+                        <AppBarTab title={"My Reviews"} url="/myReviews" />
+                        <AppBarTab title={"Sign-out"} handlePress={async () => {
+                            await authStorage.removeAccessToken()
+                            await apolloClient.resetStore();
+                        }} />
+                    </>
                     :
                     <AppBarTab title={"Sign-in/up"} url="/signin" />
             }

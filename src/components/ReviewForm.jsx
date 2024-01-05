@@ -13,14 +13,10 @@ const validationSchema = yup.object().shape({
 });
 
 const initialValues = {
-  // ownerName: "",
-  // repoName: "",
-  // rating: "",
-  // review: "",
-  ownerName: "jaredpalmer",
-  repoName: "formik",
-  rating: "10",
-  review: "good",
+  ownerName: "",
+  repoName: "",
+  rating: "",
+  review: "",
 };
 
 const styles = StyleSheet.create({

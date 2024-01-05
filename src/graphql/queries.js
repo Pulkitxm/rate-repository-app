@@ -81,6 +81,25 @@ export const ME = gql`
   }
 `;
 
+export const ME_REVIEWS = gql`
+  query Me {
+    me {
+      reviews {
+        edges {
+          node {
+            rating
+            createdAt
+            text
+            user{
+              username
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
 export const CREATE_USER = gql`
   mutation Mutation($user: CreateUserInput) {
     createUser(user: $user) {
