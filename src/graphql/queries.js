@@ -6,6 +6,8 @@ export const GET_REPOSITORIES = gql`
       edges {
         node {
           id
+          ownerName
+          name
           url
           fullName
           description
@@ -84,6 +86,26 @@ export const CREATE_USER = gql`
     createUser(user: $user) {
       id
       username
+    }
+  }
+`;
+
+export const GET_REPO_NAME_BY_AUTHOR_NAME = gql`
+  query Query($ownerName: String) {
+    repositories(ownerName: $ownerName) {
+      edges {
+        node {
+          name
+        }
+      }
+    }
+  }
+`;
+
+export const CREATE_REVIEW = gql`
+  mutation Mutation($review: CreateReviewInput) {
+    createReview(review: $review) {
+      id
     }
   }
 `;

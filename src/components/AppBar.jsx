@@ -3,7 +3,7 @@ import Constants from 'expo-constants';
 import AppBarTab from './AppBarTab'
 import Styles from '../../theme'
 import { useApolloClient, useQuery } from '@apollo/client';
-import {ME} from '../graphql/queries'
+import { ME } from '../graphql/queries'
 import useAuthStorage from '../hooks/useAuthStorage';
 const styles = StyleSheet.create({
     container: {
@@ -24,8 +24,12 @@ const AppBar = () => {
             }
             <AppBarTab title={"Repositories"} url="/" />
             {
+                meData && meData.me &&
+                <AppBarTab title={"Create a Review"} url="/addReview" />
+            }
+            {
                 meData && meData.me ?
-                    <AppBarTab title={"Sign-out"} handlePress={async() => {
+                    <AppBarTab title={"Sign-out"} handlePress={async () => {
                         await authStorage.removeAccessToken()
                         await apolloClient.resetStore();
                     }} />

@@ -74,6 +74,10 @@ const styles = StyleSheet.create({
         marginTop: 10,
         marginBottom: 10,
     },
+    reviews: {
+        height:460,
+        flexGrow: 1,
+    }
 });
 const svgData = `
   <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="100" height="100" viewBox="0 0 64 64">
@@ -131,19 +135,22 @@ const RepositoryItem = ({ item, isSingle,index }) => {
                         }} />
                     }
                 </View>
-                <FlatList
-                    style={{...styles.reviews,marginTop:10}}
-                    data={item.reviews}
-                    renderItem={({ item: review }) => (
-                        <Review
-                            rating={review.rating}
-                            text={review.text}
-                            user={review.user}
-                            createdAt={review.createdAt}
-                        />
-                    )}
-                    keyExtractor={({ id }) => id}
-                />
+                {
+                    isSingle &&
+                    <FlatList
+                        style={{ ...styles.reviews, marginTop: 10 }}
+                        data={item.reviews}
+                        renderItem={({ item: review }) => (
+                            <Review
+                                rating={review.rating}
+                                text={review.text}
+                                user={review.user}
+                                createdAt={review.createdAt}
+                            />
+                        )}
+                        keyExtractor={({ id }) => id}
+                    />
+                }
             </View>
         </Pressable>
     )

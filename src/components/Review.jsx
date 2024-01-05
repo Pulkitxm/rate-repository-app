@@ -3,6 +3,7 @@ import { Text, View, StyleSheet, Platform } from 'react-native'
 const styles = StyleSheet.create({
   reviewContainer: {
     height: 250,
+    width: "98%",
     display: "flex",
     flexDirection: "row",
     padding: 10,
@@ -62,8 +63,7 @@ const Review = ({ text, rating, user, createdAt }) => {
         <Text style={{ fontWeight: "900",fontSize:18 }} >{user}</Text>
         <Text style={{ opacity: 0.7 }}>{formattedDate}</Text>
       </View>
-      <Text>{text}</Text>
-      <Text>{createdAt}</Text>
+      <Text style={{width:"18%"}} >{text}</Text>
     </View>
   </View>)
 }
