@@ -13,7 +13,6 @@ const styles = StyleSheet.create({
 });
 
 const SortMenu = ({value,setValue}) => {
-    console.log(value);
     return (
         <Picker
             selectedValue={value}

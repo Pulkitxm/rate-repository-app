@@ -22,13 +22,13 @@ const MyReviews = () => {
     return <View style={styles.loaderContainer}>
       <CustomLoader text={"loading reviews..."} />
     </View>
-  } else {
+  }
+  if (data.me && data.me.reviews){
     const myReviews = data.me.reviews.edges.map(i=>i.node)
-    console.log(myReviews[0]);
     return (
       <>
         {
-          myReviews.map((i,index) => {
+          myReviews.map((i, index) => {
             return (
               <Review
                 key={index}
@@ -36,12 +36,17 @@ const MyReviews = () => {
                 rating={i.rating}
                 user={i.user.username}
                 createdAt={i.createdAt}
+                showActions={true}
+                repoId={i.repository.id}
+                id={i.id}
               />
             )
           })
         }
       </>
     )
+  } else {
+    return <Text>Please login to see this page </Text>
   }
 }
 export default MyReviews

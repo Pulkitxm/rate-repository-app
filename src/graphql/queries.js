@@ -87,16 +87,26 @@ export const ME_REVIEWS = gql`
       reviews {
         edges {
           node {
+            id
             rating
             createdAt
             text
             user{
               username
             }
+            repository {
+                id 
+              }
           }
         }
       }
     }
+  }
+`;
+
+export const DELETE_REVIEW = gql`
+  mutation Mutation($deleteReviewId: ID!) {
+    deleteReview(id: $deleteReviewId)
   }
 `;
 

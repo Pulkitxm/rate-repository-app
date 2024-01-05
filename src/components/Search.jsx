@@ -62,7 +62,6 @@ const Search = ({ search, setSearch, searchVal, setSearchVal }) => {
       <TextInput
         style={styles.input}
         onChangeText={(text) => {
-          console.log(text);
           setSearch(text);
         }}
         value={search}
