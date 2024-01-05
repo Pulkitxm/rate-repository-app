@@ -3,7 +3,8 @@ import { Text, TextInput, Pressable, View } from 'react-native';
 import { Formik, useField } from 'formik';
 import { Alert } from 'react-native';
 import useSignIn from '../hooks/useSignin';
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
+import { useEffect, useState } from 'react';
 
 const validationSchema = yup.object().shape({
     username: yup
@@ -15,11 +16,6 @@ const validationSchema = yup.object().shape({
         .min(8, 'password must be greater than 8 charcaters')
         .required('Password is required'),
 });
-
-const initialValues = {
-    username: '',
-    password: '',
-};
 
 const styles = {
     signInContainer: {
@@ -60,6 +56,7 @@ const SingInForm = ({ onSubmit }) => {
     const [passwordField, passwordMeta, passwordHelpers] = useField('password');
     const userNameError = usernameMeta.touched && usernameMeta.error;
     const passwordError = passwordMeta.touched && passwordMeta.error;
+    const navigate = useNavigate()
     return (
         <View
             style={styles.signInContainer}
@@ -86,41 +83,62 @@ const SingInForm = ({ onSubmit }) => {
                 {passwordMeta.error}
             </Text>}
             <Pressable onPress={onSubmit}   >
-                <Text style={styles.buttonSubmit} testID='submit'>Sign-In</Text>
+                <Text style={{ ...styles.buttonSubmit, backgroundColor: "green" }} testID='submit'>Sign-In</Text>
+            </Pressable>
+            <Text style={{ fontSize: 25, textAlign: "center" }} >or</Text>
+            <Pressable onPress={() => {
+                navigate("/signup")
+            }} style={{}}    >
+                <Text style={{ ...styles.buttonSubmit, backgroundColor: "red", color: "#000" }} testID='submit'>Sign-Up</Text>
             </Pressable>
         </View>
     );
 };
-
-export const SiginContainer = ({ onSubmit }) => {
-    return <Formik
-        initialValues={initialValues}
-        onSubmit={onSubmit}
-        validationSchema={validationSchema}
-    >
-        {({ handleSubmit }) => <SingInForm onSubmit={handleSubmit} />}
-    </Formik >
-}
+export const SiginContainer = ({ onSubmit, initialValues }) => {
+    return (
+        <Formik
+            key={JSON.stringify(initialValues)} // Re-render when initialValues change
+            initialValues={initialValues}
+            onSubmit={onSubmit}
+            validationSchema={validationSchema}
+        >
+            {({ handleSubmit }) => <SingInForm onSubmit={handleSubmit} />}
+        </Formik>
+    );
+};
 
 const SignIn = () => {
-    const { signIn, error } = useSignIn()
-    const navigate = useNavigate()
+    const { signIn, error } = useSignIn();
+    const navigate = useNavigate();
+    const [initialValues, setInitialValues] = useState({ username: '', password: '' });
+    const params = useParams();
+
+    useEffect(() => {
+        if (params.username && params.password &&
+            (params.username !== initialValues.username || params.password !== initialValues.password)) {
+            setInitialValues({
+                username: params.username,
+                password: params.password,
+            });
+        }
+    }, [params]);
+
     const onSubmit = async (values) => {
         const { username, password } = values;
-        if (username != "" && password != "") {
+        if (username !== "" && password !== "") {
             try {
-                const res = await signIn(username, password)
-                navigate("/sigin")
+                const res = await signIn(username, password);
+                navigate("/");
             } catch (err) {
-                Alert.alert(err.message)
+                Alert.alert(err.message);
             }
         } else {
-            Alert.alert("Please enter username and password to sign in ")
+            Alert.alert("Please enter username and password to sign in");
         }
     };
 
     return (
-        <SiginContainer onSubmit={onSubmit} />
+        <SiginContainer onSubmit={onSubmit} initialValues={initialValues} />
     );
 };
 

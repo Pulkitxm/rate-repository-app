@@ -131,7 +131,6 @@ const RepositoryItem = ({ item, isSingle,index }) => {
                         }} />
                     }
                 </View>
-                <Text style={{ marginTop: 10, marginBottom: 10, fontSize: 30, fontWeight: 800 }} >Reviews</Text>
                 <FlatList
                     style={{...styles.reviews,marginTop:10}}
                     data={item.reviews}

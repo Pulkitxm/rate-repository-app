@@ -18,6 +18,10 @@ const AppBar = () => {
     const authStorage = useAuthStorage();
     return (<View style={styles.container}>
         <ScrollView horizontal>
+            {
+                meData && meData.me &&
+                <AppBarTab title={`Hi ${meData.me.username}!`} />
+            }
             <AppBarTab title={"Repositories"} url="/" />
             {
                 meData && meData.me ?
@@ -27,10 +31,6 @@ const AppBar = () => {
                     }} />
                     :
                     <AppBarTab title={"Sign-in/up"} url="/signin" />
-            }
-            {
-                meData && meData.me &&
-                <AppBarTab title={`Hi ${meData.me.username}!`}/>
             }
         </ScrollView>
     </View>);
