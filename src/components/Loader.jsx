@@ -14,11 +14,11 @@ const styles = StyleSheet.create({
     },
 });
 
-const CustomLoader = ({ text = 'Loading...' }) => {
+const CustomLoader = ({ text = 'Loading...',onlyLoader }) => {
     return (
         <View style={styles.container}>
             <ActivityIndicator size="large" color="#0000ff" />
-            <Text style={styles.text}>{text}</Text>
+            { !onlyLoader && <Text style={styles.text}>{text}</Text>}
         </View>
     );
 };

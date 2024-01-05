@@ -6,6 +6,7 @@ import useRepository from '../hooks/useRepository';
 import useRepositories from '../hooks/useRepositories';
 import { useState } from 'react';
 import SortMenu from './SortMenu';
+import Search from './Search';
 
 const styles = StyleSheet.create({
     separator: {
@@ -21,7 +22,6 @@ const styles = StyleSheet.create({
 const ItemSeparator = () => <View style={styles.separator} />;
 
 export const RepositoryListContainer = ({ repositories }) => {
-    console.log(repositories);
     return <FlatList
         data={repositories}
         ItemSeparatorComponent={ItemSeparator}
@@ -37,9 +37,12 @@ export const RepositoryListContainer = ({ repositories }) => {
 }
 
 const ShowRepositories = ({value,setValue}) => {
+    const [search, setSearch] = useState('')
+    const [searchVal, setSearchVal] = useState('')
     const { repositories, loading, refetch } = useRepositories(
         value == "Latest repositories" ? "CREATED_AT" : value == "Highest rated repositories" ? "RATING_AVERAGE" : value == "Lowest rated repositories" ? "RATING_AVERAGE" : "",
         value == "Latest repositories" ? "DESC" : value == "Highest rated repositories" ? "DESC" : value == "Lowest rated repositories" ? "ASC" : ""
+        , searchVal
     );
     if (loading) {
         return (
@@ -49,6 +52,7 @@ const ShowRepositories = ({value,setValue}) => {
         );
     }
     return <>
+        <Search search={search} setSearch={setSearch} searchVal={searchVal} setSearchVal={setSearchVal} />
         <SortMenu value={value} setValue={setValue} />
         <RepositoryListContainer repositories={repositories} />
     </>
