@@ -4,6 +4,9 @@ import Loader from './Loader'
 import { useParams } from 'react-router-native';
 import useRepository from '../hooks/useRepository';
 import useRepositories from '../hooks/useRepositories';
+import { useState } from 'react';
+import SortMenu from './SortMenu';
+
 const styles = StyleSheet.create({
     separator: {
         height: 10,
@@ -18,6 +21,7 @@ const styles = StyleSheet.create({
 const ItemSeparator = () => <View style={styles.separator} />;
 
 export const RepositoryListContainer = ({ repositories }) => {
+    console.log(repositories);
     return <FlatList
         data={repositories}
         ItemSeparatorComponent={ItemSeparator}
@@ -32,8 +36,11 @@ export const RepositoryListContainer = ({ repositories }) => {
     />
 }
 
-const ShowRepositories = () => {
-    const { repositories, loading, refetch } = useRepositories();
+const ShowRepositories = ({value,setValue}) => {
+    const { repositories, loading, refetch } = useRepositories(
+        value == "Latest repositories" ? "CREATED_AT" : value == "Highest rated repositories" ? "RATING_AVERAGE" : value == "Lowest rated repositories" ? "RATING_AVERAGE" : "",
+        value == "Latest repositories" ? "DESC" : value == "Highest rated repositories" ? "DESC" : value == "Lowest rated repositories" ? "ASC" : ""
+    );
     if (loading) {
         return (
             <View style={styles.loaderContainer}>
@@ -41,33 +48,36 @@ const ShowRepositories = () => {
             </View>
         );
     }
-    return <RepositoryListContainer repositories={repositories} />
+    return <>
+        <SortMenu value={value} setValue={setValue} />
+        <RepositoryListContainer repositories={repositories} />
+    </>
 }
 
 export const RepositoryContainer = ({ id }) => {
     const { data, loading, refetch } = useRepository(id);
-    if(loading){
+    if (loading) {
         return <View style={styles.loaderContainer}>
             <Loader text={"loading respository..."} />
-        </View> 
+        </View>
     }
     const repo = {
-        id:data.repository.id,
-        url:data.repository.url,
-        fullName:data.repository.fullName,
-        description:data.repository.description,
-        language:data.repository.language,
-        forksCount:data.repository.forksCount,
-        stargazersCount:data.repository.stargazersCount,
-        ratingAverage:data.repository.ratingAverage,
-        reviewCount:data.repository.reviewCount,
-        ownerAvatarUrl:data.repository.ownerAvatarUrl,
+        id: data.repository.id,
+        url: data.repository.url,
+        fullName: data.repository.fullName,
+        description: data.repository.description,
+        language: data.repository.language,
+        forksCount: data.repository.forksCount,
+        stargazersCount: data.repository.stargazersCount,
+        ratingAverage: data.repository.ratingAverage,
+        reviewCount: data.repository.reviewCount,
+        ownerAvatarUrl: data.repository.ownerAvatarUrl,
     }
     repo.reviews = data.repository.reviews.edges.map(i => {
         let j = i.node
-        j =  {
+        j = {
             ...j,
-            user:j.user.username
+            user: j.user.username
         }
         delete j["__typename"]
         delete j["userId"]
@@ -83,11 +93,12 @@ export const RepositoryContainer = ({ id }) => {
 
 const RepositoryList = () => {
     const params = useParams()
+    const [value, setValue] = useState("Latest repositories");
     if (params && params.id) {
         const ID = params.id
         return <RepositoryContainer id={ID} />
     } else {
-        return <ShowRepositories />
+        return <ShowRepositories value={value} setValue={setValue} />
     }
 };
 
