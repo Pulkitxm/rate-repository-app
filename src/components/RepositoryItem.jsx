@@ -84,7 +84,7 @@ const svgData = `
     <path d="M 12 8 L 8 12 L 24.666016 32 L 8 52 L 12 56 L 32 39.333984 L 52 56 L 56 52 L 39.333984 32 L 56 12 L 52 8 L 32 24.666016 L 12 8 z"></path>
   </svg>
 `;
-const RepositoryItem = ({ item, isSingle, isLast }) => {
+const RepositoryItem = ({ item, isSingle, isLast, onEndReach }) => {
     const navigate = useNavigate()
     return (<>
         <Pressable style={styles.tab} onPress={() => {
@@ -140,6 +140,8 @@ const RepositoryItem = ({ item, isSingle, isLast }) => {
                     <FlatList
                         style={{ ...styles.reviews, marginTop: 10 }}
                         data={item.reviews}
+                        onEndReached={onEndReach}
+                        onEndReachedThreshold={0.5}
                         renderItem={({ item: review }) => (
                             <Review
                                 rating={review.rating}

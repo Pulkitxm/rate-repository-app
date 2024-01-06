@@ -22,6 +22,7 @@ const styles = StyleSheet.create({
 const ItemSeparator = () => <View style={styles.separator} />;
 
 export const RepositoryListContainer = ({ repositories, onEndReach, showLoader }) => {
+    console.log(repositories);
     return <>
         <FlatList
             data={repositories}
@@ -68,12 +69,11 @@ const ShowRepositories = ({ value, setValue }) => {
         );
     }
     const onEndReach = () => {
-        console.log('You have reached the end of the list');
         setshowLoader(true)
         setTimeout(() => {
             fetchMore()
             setshowLoader(false)
-        },2000)
+        }, 500)
     };
     return <>
         <Search search={search} setSearch={setSearch} searchVal={searchVal} setSearchVal={setSearchVal} />
@@ -83,40 +83,49 @@ const ShowRepositories = ({ value, setValue }) => {
 }
 
 export const RepositoryContainer = ({ id }) => {
-    const { data, loading, refetch } = useRepository(id);
+    const { data, loading, fetchMore } = useRepository({
+        repositoryId: id,
+        first:1
+    });
     if (loading) {
         return <View style={styles.loaderContainer}>
             <Loader text={"loading respository..."} />
         </View>
     }
-    const repo = {
-        id: data.repository.id,
-        url: data.repository.url,
-        fullName: data.repository.fullName,
-        description: data.repository.description,
-        language: data.repository.language,
-        forksCount: data.repository.forksCount,
-        stargazersCount: data.repository.stargazersCount,
-        ratingAverage: data.repository.ratingAverage,
-        reviewCount: data.repository.reviewCount,
-        ownerAvatarUrl: data.repository.ownerAvatarUrl,
-    }
-    repo.reviews = data.repository.reviews.edges.map(i => {
-        let j = i.node
-        j = {
-            ...j,
-            user: j.user.username
+    if (data && data.repository) {
+        const repo = {
+            id: data.repository.id,
+            url: data.repository.url,
+            fullName: data.repository.fullName,
+            description: data.repository.description,
+            language: data.repository.language,
+            forksCount: data.repository.forksCount,
+            stargazersCount: data.repository.stargazersCount,
+            ratingAverage: data.repository.ratingAverage,
+            reviewCount: data.repository.reviewCount,
+            ownerAvatarUrl: data.repository.ownerAvatarUrl,
         }
-        delete j["__typename"]
-        delete j["userId"]
-        return j
-    })
-    return <>
-        <RepositoryItem
-            item={repo}
-            isSingle={true}
-        />
-    </>
+        repo.reviews = data.repository.reviews.edges.map(i => {
+            let j = i.node
+            j = {
+                ...j,
+                user: j.user.username
+            }
+            delete j["__typename"]
+            delete j["userId"]
+            return j
+        })
+        return <>
+            <RepositoryItem
+                item={repo}
+                isSingle={true}
+                show
+                onEndReach={() => {
+                    fetchMore()
+                }}
+            />
+        </>
+    }
 }
 
 const RepositoryList = () => {
