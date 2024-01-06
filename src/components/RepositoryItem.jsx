@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     reviews: {
-        height:460,
+        height: 460,
         flexGrow: 1,
     }
 });
@@ -84,9 +84,9 @@ const svgData = `
     <path d="M 12 8 L 8 12 L 24.666016 32 L 8 52 L 12 56 L 32 39.333984 L 52 56 L 56 52 L 39.333984 32 L 56 12 L 52 8 L 32 24.666016 L 12 8 z"></path>
   </svg>
 `;
-const RepositoryItem = ({ item, isSingle,index }) => {
+const RepositoryItem = ({ item, isSingle, isLast }) => {
     const navigate = useNavigate()
-    return (
+    return (<>
         <Pressable style={styles.tab} onPress={() => {
             if (!isSingle) navigate(`/repo/${item.id}`);
         }}>
@@ -128,7 +128,7 @@ const RepositoryItem = ({ item, isSingle,index }) => {
                         <Text style={{ fontSize: 17, opacity: .7 }} >Ratings</Text>
                     </View>
                 </View>
-                <View>  
+                <View>
                     {
                         isSingle && <Button style={styles.bottom} title='Open in Github' onPress={() => {
                             Linking.openURL(item.url)
@@ -153,7 +153,10 @@ const RepositoryItem = ({ item, isSingle,index }) => {
                 }
             </View>
         </Pressable>
-    )
+        {
+            isLast && <View style={{ height: 60 }} ></View>
+        }
+    </>)
 }
 
 export default RepositoryItem;

@@ -75,7 +75,7 @@ const Review = ({ text, rating, user, createdAt, showActions,repoId,id }) => {
           <Text style={{ fontWeight: "900", fontSize: 18 }} >{user}</Text>
           <Text style={{ opacity: 0.7 }}>{formattedDate}</Text>
         </View>
-        <Text style={{ width: "18%" }} >{text}</Text>
+        <Text style={{ width: 250}} >{text}</Text>
       </View>
     </View>
     {

@@ -7,7 +7,7 @@ import useRepositories from '../hooks/useRepositories';
 import { useState } from 'react';
 import SortMenu from './SortMenu';
 import Search from './Search';
-
+import uuid from 'react-native-uuid';
 const styles = StyleSheet.create({
     separator: {
         height: 10,
@@ -21,29 +21,45 @@ const styles = StyleSheet.create({
 
 const ItemSeparator = () => <View style={styles.separator} />;
 
-export const RepositoryListContainer = ({ repositories }) => {
-    return <FlatList
-        data={repositories}
-        ItemSeparatorComponent={ItemSeparator}
-        renderItem={({ item, index }) => (
-            <RepositoryItem
-                key={item.id}
-                item={item}
-                isSingle={false}
-                index={index}
-            />
-        )}
-    />
+export const RepositoryListContainer = ({ repositories, onEndReach, showLoader }) => {
+    return <>
+        <FlatList
+            data={repositories}
+            ItemSeparatorComponent={ItemSeparator}
+            onEndReached={onEndReach}
+            onEndReachedThreshold={0.5}
+            renderItem={({ item, index }) => {
+                return (
+                    <RepositoryItem
+                        key={index}
+                        item={item}
+                        isSingle={false}
+                        index={index}
+                        isLast={index == repositories.length - 1}
+                    />
+                )
+            }}
+        />
+        {
+            showLoader && <>
+                <View style={{ height: 20 }} ></View>
+                <Loader />
+                <View style={{ height: 20 }} ></View>
+            </>
+        }
+    </>
 }
 
-const ShowRepositories = ({value,setValue}) => {
+const ShowRepositories = ({ value, setValue }) => {
     const [search, setSearch] = useState('')
     const [searchVal, setSearchVal] = useState('')
-    const { repositories, loading, refetch } = useRepositories(
-        value == "Latest repositories" ? "CREATED_AT" : value == "Highest rated repositories" ? "RATING_AVERAGE" : value == "Lowest rated repositories" ? "RATING_AVERAGE" : "",
-        value == "Latest repositories" ? "DESC" : value == "Highest rated repositories" ? "DESC" : value == "Lowest rated repositories" ? "ASC" : ""
-        , searchVal
-    );
+    const [showLoader, setshowLoader] = useState()
+    const { repositories, loading, fetchMore } = useRepositories({
+        orderBy: value == "Latest repositories" ? "CREATED_AT" : value == "Highest rated repositories" ? "RATING_AVERAGE" : value == "Lowest rated repositories" ? "RATING_AVERAGE" : "",
+        orderDirection: value == "Latest repositories" ? "DESC" : value == "Highest rated repositories" ? "DESC" : value == "Lowest rated repositories" ? "ASC" : "",
+        searchKeyword: searchVal,
+        first: 4
+    });
     if (loading) {
         return (
             <View style={styles.loaderContainer}>
@@ -51,10 +67,18 @@ const ShowRepositories = ({value,setValue}) => {
             </View>
         );
     }
+    const onEndReach = () => {
+        console.log('You have reached the end of the list');
+        setshowLoader(true)
+        setTimeout(() => {
+            fetchMore()
+            setshowLoader(false)
+        },2000)
+    };
     return <>
         <Search search={search} setSearch={setSearch} searchVal={searchVal} setSearchVal={setSearchVal} />
         <SortMenu value={value} setValue={setValue} />
-        <RepositoryListContainer repositories={repositories} />
+        <RepositoryListContainer repositories={repositories} onEndReach={onEndReach} showLoader={showLoader} />
     </>
 }
 
